@@ -6,32 +6,6 @@ using System.Threading.Tasks;
 
 namespace RCL_Class
 {
-    public enum Dimension
-    {
-        Real,
-        Imaginary,
-        Magnitude
-    }
-
-    public enum Direction
-    {
-        Negative = -1,
-        Positive = 1
-    }
-
-    public enum EngineType
-    {
-        PartRelative,
-        Absolute
-    }
-
-    public enum EngineOperation
-    {
-        ParallelAddition,
-        SeriesAddition,
-        Addition
-    }
-
     public class InvalidOperationException: Exception
     {
         public InvalidOperationException(string msg) : base(msg)
@@ -139,137 +113,28 @@ namespace RCL_Class
         }
     }
 
-    public class Part
+    public class ComplexPart
     {
         //public Attributes
-        public Dimension dimension { set; get; }
-        public Direction direction { set; get; }
-        public double partValue
-        {
-            set
-            {
-                switch (dimension)
-                {
-                    case Dimension.Real:
-                        complexPartValue.R = (int)direction * value;
-                        break;
-                    case Dimension.Imaginary:
-                        complexPartValue.i = (int)direction * value;
-                        break;
-                    case Dimension.Magnitude:
-                        complexPartValue = complexNumber.splitZ(value, partTheta);
-                        break;
-                }
-            }
-            get
-            {
-                return complexPartValue.z;
-            }
-        }
-        public double partTheta
-        {
-            set
-            {
-                if(dimension == Dimension.Magnitude)
-                {
-                    complexPartValue = complexNumber.splitZ(partValue, value);
-                }
-            }
-            get
-            {
-                return complexPartValue.theta;
-            }
-        }
+        public Func<complexNumber, double> ResistivePropertyFunction { set; get; }
+        public double PartValue { set; get; }
 
         //private Attributes
-        private complexNumber complexPartValue { set; get; }
+        private complexNumber ComplexResistiveProperty
+        {
+            get
+            {
+                return ResistivePropertyFunction(PartValue);
+            }
+        }
 
-        public Part(Dimension partDim)
+        public ComplexPart()
         {
-            dimension = partDim;
-            direction = Direction.Positive;
-            complexPartValue = new complexNumber(0.0f, 0.0f);
+            PartValue = 0;
         }
-        public Part(Dimension partDim, Direction vectorDirection)
+        public ComplexPart(double value)
         {
-            dimension = partDim;
-            direction = vectorDirection;
-            complexPartValue = new complexNumber(0.0f, 0.0f);
-        }
-        public Part(Dimension partDim, double Value)
-        {
-            dimension = partDim;
-            complexPartValue = new complexNumber(0.0f, 0.0f);
-            partValue = Value;
-        }
-        public Part(Dimension partDim, Direction vectorDirection, double Value)
-        {
-            dimension = partDim;
-            direction = vectorDirection;
-            complexPartValue = new complexNumber(0.0f, 0.0f);
-            partValue = Value;
-        }
-        public Part(Dimension partDim, double Value, double theta)
-        {
-            dimension = partDim;
-            complexPartValue = new complexNumber(0.0f, 0.0f);
-        }
-        public Part(Dimension partDim, Direction vectorDirection, double Value, double Theta)
-        {
-            dimension = partDim;
-            direction = vectorDirection;
-            complexPartValue = new complexNumber(0.0f, 0.0f);
-            partValue = Value;
-            partTheta = Theta;
-        }
-    }
-
-    public sealed class Resistance : Part
-    {
-        public Resistance() : base(Dimension.Real)
-        {
-
-        }
-        public Resistance(double Value) : base(Dimension.Real, Value)
-        {
-
-        }
-    }
-    public sealed class Capacitance : Part
-    {
-        public Capacitance() : base(Dimension.Imaginary, Direction.Negative)
-        {
-
-        }
-        public Capacitance(double Value) : base(Dimension.Imaginary, Direction.Negative, Value)
-        {
-
-        }
-    }
-    public sealed class Inductance : Part
-    {
-        public Inductance() : base(Dimension.Imaginary, Direction.Positive)
-        {
-
-        }
-        public Inductance(double Value) : base(Dimension.Imaginary, Direction.Positive, Value)
-        {
-
-        }
-    }
-    public sealed class Impedance : Part
-    {
-        public Impedance() : base(Dimension.Magnitude)
-        {
-
-        }
-        public Impedance(double Value) : base(Dimension.Magnitude, Value)
-        {
-
-        }
-        public Impedance(double Value, double theta) : base(Dimension.Magnitude, Value, theta)
-        {
-
+            PartValue = value;
         }
     }
 }
