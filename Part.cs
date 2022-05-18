@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RCL_Class
+namespace Part
 {
+    public delegate complexNumber getComplexPropertyMethod(double frequency);
+
     public class InvalidOperationException: Exception
     {
         public InvalidOperationException(string msg) : base(msg)
@@ -116,11 +118,11 @@ namespace RCL_Class
     public class ComplexPart
     {
         //public Attributes
-        public Func<complexNumber, double> ResistivePropertyFunction { set; get; }
+        public getComplexPropertyMethod ResistivePropertyFunction { set; get; }
         public double PartValue { set; get; }
 
         //private Attributes
-        private complexNumber ComplexResistiveProperty
+        public complexNumber ComplexResistiveProperty
         {
             get
             {
@@ -128,12 +130,14 @@ namespace RCL_Class
             }
         }
 
-        public ComplexPart()
+        public ComplexPart(getComplexPropertyMethod propertyMethod)
         {
+            ResistivePropertyFunction = propertyMethod;
             PartValue = 0;
         }
-        public ComplexPart(double value)
+        public ComplexPart(getComplexPropertyMethod properyMethod, double value)
         {
+            ResistivePropertyFunction = properyMethod;
             PartValue = value;
         }
     }
