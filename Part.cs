@@ -76,6 +76,11 @@ namespace Part
             }
         }
 
+        public complexNumber()
+        {
+            R = 0.0f;
+            i = 0.0f;
+        }
         public complexNumber(double Real, double Imaginary)
         {
             R = Real;
