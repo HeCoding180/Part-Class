@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Part
 {
-    public delegate complexNumber getComplexPropertyMethod(double frequency);
+    public delegate complexNumber getComplexPropertyMethod(double partValue, double frequency);
 
     public class InvalidOperationException: Exception
     {
@@ -125,13 +125,13 @@ namespace Part
         //public Attributes
         public getComplexPropertyMethod ResistivePropertyFunction { set; get; }
         public double PartValue { set; get; }
+        public double frequency { set; get; }
 
-        //private Attributes
         public complexNumber ComplexResistiveProperty
         {
             get
             {
-                return ResistivePropertyFunction(PartValue);
+                return ResistivePropertyFunction(PartValue, frequency);
             }
         }
 
