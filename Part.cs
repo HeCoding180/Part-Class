@@ -140,10 +140,33 @@ namespace Part
             ResistivePropertyFunction = propertyMethod;
             PartValue = 0;
         }
-        public ComplexPart(getComplexPropertyMethod properyMethod, double value)
+        public ComplexPart(getComplexPropertyMethod propertyMethod, double value)
         {
-            ResistivePropertyFunction = properyMethod;
+            ResistivePropertyFunction = propertyMethod;
             PartValue = value;
+        }
+    }
+
+    public class RealPart
+    {
+        public static double omega(double frequency)
+        {
+            return 2 * Math.PI * frequency;
+        }
+
+        public static complexNumber resistance(double partValue, double frequency)
+        {
+            return new complexNumber(partValue, 0.0f);
+        }
+        public static complexNumber inductiveReactiance(double partValue, double frequency)
+        {
+            double reactance = omega(frequency) * partValue;
+            return new complexNumber(0.0f, reactance);
+        }
+        public static complexNumber capacitiveReactiance(double partValue, double frequency)
+        {
+            double reactance = -(1 / (omega(frequency) * partValue));
+            return new complexNumber(0.0f, reactance);
         }
     }
 }
